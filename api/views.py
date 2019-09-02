@@ -54,20 +54,30 @@ def api_update_post_view(request, slug):
             return Response(data=data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+def api_delete_post_view(request, slug):
+    try:
+        post = Post.objects.get(slug=slug)
+    except BlogPost.DoesnotExists:
+        return Response(status=status.HTTP_404__NOT_FOUND)
 
+    if request.method == 'DELETE':
+        operation = post.delete()
+        data = {}
+        if operation:
+            data['success'] = 'delete successfully'
+        else:
+            data['failure'] = 'delete failed'
+        return Response(data=data)
 
-# class PostAPIView(ListAPIView):
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = 'post.html'
+@api_view(['POST'])
+def api_create_post_view(request, slug):
+    account = Account.objects.get(pk=1)
+    post =Post(author=account)
 
-#     def get(self, request):
-#         queryset = Post.objects.all()
-#         return Response({'posts': queryset})
-
-# class PostAPIView(ListAPIView):
-#     renderer_classes = [TemplateHTMLRenderer]
-#     template_name = 'news.html'
-
-#     def get(self, request):
-#         queryset = Post.objects.all()
-#         return Response({'video': queryset})
+    if request.method == 'Post':
+        serializers = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response (serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
