@@ -37,6 +37,23 @@ def api_post_view(request, slug):
         serializer = PostSerializer(post)
         return Response(serializer.data)
 
+@api_view(['PUT'])
+def api_update_post_view(request, slug):
+
+    try:
+        post = Post.objects.get(slug=slug)
+    except BlogPost.DoesnotExists:
+        return Response(status=status.HTTP_404__NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = PostSerializer(post, data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+            data['success'] = 'update was successfully'
+            return Response(data=data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 # class PostAPIView(ListAPIView):
