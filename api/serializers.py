@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from api.models import User, UserProfile
+from api.models import User, UserProfile, Post, News, Video
+from datetime import datetime
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = UserProfile
         fields = ('address', 'country', 'city', 'zip', 'photo')
@@ -39,5 +39,21 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.zip = profile_data.get('zip', profile.zip)
         profile.photo = profile_data.get('photo', profile.photo)
         profile.save()
-
         return instance
+
+
+class PostSerializer(serializers.Serializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class NewSerializer(serializers.Serializer):
+    class Meta:
+        model = News
+        fields = '__all__'
+
+class VideoSerializer(serializers.Serializer):
+    class Meta:
+        model = Video
+        fields = '__all__'
