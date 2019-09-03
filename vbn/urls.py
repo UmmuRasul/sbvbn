@@ -20,8 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls', 'api')),
-    path('api/account', include('account.api.urls', 'account_api'))
+    path('myapi/api/', include('api.myapi.urls', 'myapi')),
+    path('api/account/', include('account.api.urls', 'account_api'))
 
 
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
